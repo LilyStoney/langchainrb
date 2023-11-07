@@ -79,7 +79,7 @@ module Langchain::Vectorsearch
         vectorizer: "none",
         properties: [
           # __id to be used a pointer to the original document
-          {dataType: ["string"], name: "__id"}, # '_id' is a reserved property name (single underscore)
+          {dataType: ["string"], name: "_id"}, # '_id' is a reserved property name (single underscore)
           {dataType: ["text"], name: "content"}
         ]
       )
@@ -102,7 +102,7 @@ module Langchain::Vectorsearch
     # @param k [Integer|String] The number of results to return
     # @return [Hash] The search results
     def similarity_search(query:, k: 4)
-      embedding = llm.embed(text: query).embedding
+      embedding = llm.embed(text: query)
 
       similarity_search_by_vector(embedding: embedding, k: k)
     end
@@ -155,7 +155,7 @@ module Langchain::Vectorsearch
           __id: id.to_s,
           content: text
         },
-        vector: llm.embed(text: text).embedding
+        vector: llm.embed(text: text)
       }
     end
   end
