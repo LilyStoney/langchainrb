@@ -52,7 +52,7 @@ module Langchain::Vectorsearch
         record = client.query.get(
           class_name: index_name,
           fields: "_additional { id }",
-          where: "{ path: [\"__id\"], operator: Equal, valueString: \"#{ids[i]}\" }"
+          where: "{ path: [\"id\"], operator: Equal, valueString: \"#{ids[i]}\" }"
         )
         uuids.push record[0].dig("_additional", "id")
       end
@@ -78,8 +78,8 @@ module Langchain::Vectorsearch
         class_name: index_name,
         vectorizer: "none",
         properties: [
-          # __id to be used a pointer to the original document
-          {dataType: ["string"], name: "_id"}, # '_id' is a reserved property name (single underscore)
+          # id to be used a pointer to the original document
+          {dataType: ["ID!"], name: "id"},
           {dataType: ["text"], name: "content"}
         ]
       )
@@ -118,7 +118,7 @@ module Langchain::Vectorsearch
         class_name: index_name,
         near_vector: near_vector,
         limit: k.to_s,
-        fields: "__id content _additional { id }"
+        fields: "id content _additional { id }"
       )
     end
 
