@@ -14,4 +14,4 @@ gem "standardrb"
 gem "rubocop"
 
 # Temporary fix until https://github.com/github/graphql-client/pull/314 is merged
-gem "graphql-client", git: "https://github.com/rmosolgo/graphql-client.git", branch: "start-migrating"
+gem "graphql-client", github: "github/graphql-client", ref: "27ef61f"

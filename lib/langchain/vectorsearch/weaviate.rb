@@ -52,7 +52,7 @@ module Langchain::Vectorsearch
         record = client.query.get(
           class_name: index_name,
           fields: "_additional { id }",
-          where: "{ path: [\"id\"], operator: Equal, valueString: \"#{ids[i]}\" }"
+          where: "{ path: [\"identifier\"], operator: Equal, valueString: \"#{ids[i]}\" }"
         )
         uuids.push record[0].dig("_additional", "id")
       end
@@ -63,7 +63,7 @@ module Langchain::Vectorsearch
           class_name: index_name,
           id: uuids[i],
           properties: {
-            __id: ids[i].to_s,
+            identifier: ids[i].to_s,
             content: text
           },
           vector: llm.embed(text: text).embedding
@@ -78,8 +78,8 @@ module Langchain::Vectorsearch
         class_name: index_name,
         vectorizer: "none",
         properties: [
-          # id to be used a pointer to the original document
-          {dataType: ["ID!"], name: "id"},
+          # identifier to be used a pointer to the original document
+          {dataType: ["string"], name: "identifier"}, # '_id' is a reserved property name (single underscore)
           {dataType: ["text"], name: "content"}
         ]
       )
@@ -118,7 +118,7 @@ module Langchain::Vectorsearch
         class_name: index_name,
         near_vector: near_vector,
         limit: k.to_s,
-        fields: "id content _additional { id }"
+        fields: "identifier content _additional { id }"
       )
     end
 
@@ -152,7 +152,7 @@ module Langchain::Vectorsearch
       {
         class: index_name,
         properties: {
-          __id: id.to_s,
+          identifier: id.to_s,
           content: text
         },
         vector: llm.embed(text: text)
